@@ -6,13 +6,18 @@ import Application.DAO.FlightDAO;
 import java.util.List;
 
 /**
- * The purpose of a Service class is to contain "business logic" that sits between the web layer (controller) and
- * persistence layer (DAO). That means that the Service class performs tasks that aren't done through the web or
- * SQL: programming tasks like checking that the input is valid, conducting additional security checks, or saving the
+ * The purpose of a Service class is to contain "business logic" that sits 
+ * between the web layer (controller) and
+ * persistence layer (DAO). That means that the Service class performs 
+ * tasks that aren't done through the web or
+ * SQL: programming tasks like checking that the input is valid, conducting 
+ * additional security checks, or saving the
  * actions undertaken by the API to a logging file.
  *
- * It's perfectly normal to have Service methods that only contain a single line that calls a DAO method. An
- * application that follows best practices will often have unnecessary code, but this makes the code more
+ * It's perfectly normal to have Service methods that only contain a single 
+ * line that calls a DAO method. An
+ * application that follows best practices will often have unnecessary code, 
+ * but this makes the code more
  * readable and maintainable in the long run!
  */
 public class FlightService {
@@ -40,20 +45,28 @@ public class FlightService {
     /**
      * TODO: Use the FlightDAO to add a new flight to the database.
      *
-     * This method should also return the added flight. A distinction should be made between *transient* and
-     * *persisted* objects - the *transient* flight Object given as the parameter will not contain the flight's id,
-     * because it is not yet a database record. When this method is used, it should return the full persisted flight,
-     * which will contain the flight's id. This way, any part of the application that uses this method has
-     * all information about the new flight, because knowing the new flight's ID is necessary. This means that the
-     * method should return the Flight returned by the flightDAO's insertFlight method, and not the flight provided by
+     * This method should also return the added flight. A distinction should be 
+     * made between *transient* and
+     * *persisted* objects - the *transient* flight Object given as the parameter
+     *  will not contain the flight's id,
+     * because it is not yet a database record. When this method is used, it 
+     * should return the full persisted flight,
+     * which will contain the flight's id. This way, any part of the application 
+     * that uses this method has
+     * all information about the new flight, because knowing the new flight's ID
+     *  is necessary. This means that the
+     * method should return the Flight returned by the flightDAO's insertFlight 
+     * method, and not the flight provided by
      * the parameter 'flight'.
      *
      * @param flight an object representing a new Flight.
-     * @return the newly added flight if the add operation was successful, including the flight_id. We do this to
+     * @return the newly added flight if the add operation was successful, including
+     *  the flight_id. We do this to
      *         inform our provide the front-end client with information about the added Flight.
      */
     public Flight addFlight(Flight flight){
-        return null;
+       
+        return flightDAO.insertFlight(flight);
     }
 
     /**
@@ -70,6 +83,11 @@ public class FlightService {
      *         user should have some insight if they attempted to edit a nonexistent flight.)
      */
     public Flight updateFlight(int flight_id, Flight flight){
+        if(flightDAO.getFlightById(flight_id) != null){
+            flightDAO.updateFlight(flight_id, flight);
+            flight.setFlight_id(flight_id);
+            return flight;
+        }
         return null;
     }
 
@@ -80,7 +98,7 @@ public class FlightService {
      * @return all flights in the database.
      */
     public List<Flight> getAllFlights() {
-        return null;
+        return flightDAO.getAllFlights();
     }
 
     /**
@@ -92,6 +110,6 @@ public class FlightService {
      * @return all flights departing from departure_city and arriving at arrival_city.
      */
     public List<Flight> getAllFlightsFromCityToCity(String departure_city, String arrival_city) {
-        return null;
+        return flightDAO.getAllFlightsFromCityToCity(departure_city, arrival_city);
     }
 }
